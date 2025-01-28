@@ -1,2 +1,6 @@
 # Realtime_project
 This project is created by 3 members.Our project aim to predict the house price in an efficient way.We just use Random forest for better accuracy.
+The project titled house price prediction is a machine learning project mainly using python. Predicting house prices is a critical task in the realms of real estate and finance, significantly impacting decisions made by homeowners, investors, and policymakers. Traditional prediction methods rely heavily on historical data and expert judgment. 
+However, recent advancements in machine learning offer the potential for more accurate and efficient forecasting. This project presents a novel approach to predicting house prices using state-of-the-art machine learning algorithms. The evaluation of model performance incorporates metrics such as Mean Absolute Error (MAE), Root Mean Squared Error (RMSE), and R-squared (R2) to gauge predictive accuracy and generalization capability. 
+Robustness is ensured through cross-validation techniques, validating the models on different subsets of data to guarantee reliability and performance consistency. 
+New algorithms in machine learning like random forest and decision tree. Most of previous one used linear regression it gives less accuracy and high prices. Using random forest our prediction has done. 
