@@ -1,0 +1,128 @@
+import pandas as pd
+import NumPy as np
+from sklearn. impute import Simple Imputer
+
+
+
+from sklearn. Pipeline import Pipeline
+from sklearn. Preprocessing import Standard Scaler, One Hot Encoder
+from sklearn. Compose import Column Transformer
+from sklearn. Ensemble import RandomForest Regressor
+
+
+# Load datasets
+datasets = {
+    "Hyderabad": pd. read_ csv('C:/Users/chara/Downloads/Hyderabad.csv'),
+    "Delhi": pd. read_ csv('C:/Users/chara/Downloads/Delhi.csv'),
+    "Chennai": pd. read_ csv('C:/Users/chara/Downloads/chennai.csv'),
+}
+
+# Combine datasets
+combined_ df = pd.  Concat (datasets. Values ())
+
+
+# Extract unique locations
+all_ locations = sorted (set (combined_ df['Location']. Unique ()))
+
+# Define features and target
+features = ["Area", "No. of Bedrooms", "Swimming Pool", "Shopping Mall", "ATM", 
+            "Power Backup", "Car Parking", "AC", "Wifi", "Lift Available", "TV", "Location"]
+target = "Price"
+	
+
+# Prepare training data
+X_ train = combined_ df[features]
+y_ train = combined_ df[target]
+
+
+# Define preprocessing pipelines
+numeric_ features = X_ train.  select_ d types (include= [np. Number]).columns. tolist ()
+categorical_ features = ["Location"]
+
+numeric_ transformer = Pipeline (steps= [
+    ('imputer', Simple Imputer (strategy='most_ frequent')),
+    ('scaler', Standard Scaler ())
+])
+
+categorical_ transformer = Pipeline (steps= [
+    ('imputer', Simple Imputer (strategy='most_ frequent')),
+    ('onehot ', One Hot Encoder (handle_ unknown='ignore'))
+])
+
+
+preprocessor = Column Transformer (
+    transformers= [
+        ('num', numeric_ transformer, numeric_ features),
+        ('cat', categorical_ transformer, categorical_ features)
+])
+
+
+# Define model pipeline
+model_ pipeline = Pipeline (steps= [
+    ('preprocessor', preprocessor),
+    ('regressor', RandomForest Regressor ())
+])
+
+
+# Train the model
+model_ pipeline. Fit (X_ train, y_ train)
+def process_ data (area, bedrooms, Swimming Pool, shopping_ mall, atm, power_ backup, car_ parking, 
+                 ac, wifi, lift_ available, tv, location):
+   
+ data = {
+        "Area": area,
+        "No. of Bedrooms": bedrooms,
+        "Swimming Pool": Swimming Pool,
+        "Shopping Mall": shopping_ mall,
+        "ATM": atm,
+        "Power Backup": power_ backup,
+        "Car Parking": car_ parking,
+        "AC": ac,
+        "Wifi": wifi,
+        "Lift Available": lift_ available,
+        "TV": tv,
+        "Location": location
+    }
+
+
+    # Create Data Frame from input data
+    input_ df = pd. Data Frame (data, index= [0])
+
+
+    # Predict using the model pipeline
+    prediction = model_ pipeline. Predict (input_ df) [0]
+
+    return f" Predicted apartment price: ${prediction:.2f}"
+
+
+from ipy widgets import interact, widgets
+@interact (
+    model_ pipeline=widgets. Dropdown (options=models. Keys (), description='Model'),
+    area=widgets. Float Text (description='Area'),
+    bedrooms=widgets. Intext(description='Bedrooms'),
+    Swimming Pool=widgets. Checkbox(description='Swimming Pool'),
+    shopping_ mall=widgets. Checkbox (description='Shopping Mall'),
+    atm=widgets. Checkbox (description='ATM'),
+    power_ backup=widgets. Checkbox (description='Power Backup'),
+    car_ parking=widgets. Checkbox (description='Car Parking'),
+    ac=widgets. Checkbox (description='AC'),
+    wifi =widgets. Checkbox (description='Wifi'),
+    lift_ available=widgets. Checkbox (description='Lift Available'),
+    tv=widgets. Checkbox (description='TV'),
+    location=location_ dropdown
+)
+
+def interactive_ prediction (model_ pipeline, area, bedrooms, Swimming Pool, shopping_ mall, atm, power_ backup, 
+                           car_ parking, ac, wifi, lift_ available, tv, location):
+    
+
+    # Get the selected model pipeline from the model dictionary
+    model = models [model_ pipeline]
+    
+
+    # Call make_ prediction with all parameters
+    prediction = make_ prediction (model, area, bedrooms, Swimming Pool, shopping_ mall, atm, power_ backup, 
+                                 car_ parking, ac, wifi, 
+                                 lift_ available, tv, location)
+
+    return prediction
